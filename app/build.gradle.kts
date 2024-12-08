@@ -50,9 +50,13 @@ android {
 }
 
 dependencies {
-    implementation("com.google.android.gms:play-services-auth:21.2.0")
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.6.8")
-    implementation("androidx.compose.ui:ui:1.3.0")
+    implementation(libs.androidx.ui.text.google.fonts.v140alpha03)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.play.services.auth)
+    implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.ui)
+    implementation(libs.material3)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
