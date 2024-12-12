@@ -5,6 +5,7 @@ import android.content.Context
 import android.widget.ScrollView
 import android.widget.Space
 import android.widget.TextView
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -61,17 +62,32 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import eu.androidudemyclass.quickserve.R
+import quickserve.androidudemyclass.quickserve.Api.LoginRequest
+import quickserve.androidudemyclass.quickserve.Api.Result
+import quickserve.androidudemyclass.quickserve.Api.RetrofitClient
+import quickserve.androidudemyclass.quickserve.Api.UserRepository
+import quickserve.androidudemyclass.quickserve.Api.UserViewModel
+import quickserve.androidudemyclass.quickserve.Api.UserViewModelFactory
 
 
 @Composable
 fun LoginScreen(
-    onNavigateTo: () -> Unit,
+    onNavigateTo: (Boolean) -> Unit,
     navHostController: NavHostController = rememberNavController(),
-    currentPage: Int
+    currentPage: Int,
+    onAccount:()->Unit
 ) {
+    val userRepository = UserRepository(RetrofitClient.instance)  // Create an instance of the repository
+
+    // Initialize the UserViewModel using the ViewModelProvider.Factory
+    val viewModel: UserViewModel = viewModel(
+        factory = UserViewModelFactory(userRepository)
+    )
+    val success=true
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val proportionalPadding = screenWidth * 0.04f
@@ -242,7 +258,27 @@ fun LoginScreen(
 
             // Send Code Button
             Button(
-                onClick = { /* TODO: Handle send code */ },
+                onClick = {
+
+                    val loginRequest=LoginRequest(email,password)
+                    viewModel.login(loginRequest){result ->
+                        when(result){
+                            is Result.Success -> {
+
+                                Toast.makeText(context, "Login successful!", Toast.LENGTH_SHORT).show()
+                                onNavigateTo(success) // Navigate to verification screen
+                            }
+                            is Result.Error -> {
+
+                                Toast.makeText(context, "Login failed: ${result.exception.message}", Toast.LENGTH_SHORT).show()
+                            }
+                            Result.Loading -> TODO()
+                        }
+                    }
+
+
+
+                },
                 colors = if(isFormValid) ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800)) else ButtonDefaults.buttonColors(containerColor = Color.White),
                 shape = RoundedCornerShape(30.dp),
                 modifier = Modifier
@@ -266,7 +302,7 @@ fun LoginScreen(
                 )
                 Spacer(modifier = Modifier.width(3.dp))
                 TextButton(
-                    onClick =  onNavigateTo,
+                    onClick =  onAccount,
                     modifier = Modifier.padding(vertical = 4.dp)
                 ) {
                     Text(
@@ -339,8 +375,3 @@ fun LoginScreen(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    LoginScreen(onNavigateTo = {}, currentPage = 1)
-}

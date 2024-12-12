@@ -235,13 +235,24 @@ fun Navigation(
                 )
             }
         ){
-            LoginScreen(onNavigateTo = {
-                navController.navigate(ScreensForTheApp.SignUpScreen.route){
-                    launchSingleTop=true
-                    restoreState=true
+            LoginScreen(onNavigateTo = { success ->
+                if (success) {
+                    // Navigate to Verify screen on success
+                    navController.navigate(ScreensForTheApp.VerificationScreen.route) {
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                } else {
+                    // Handle failure (e.g., show an error toast or dialog)
                 }
             }, navHostController = navController,
-                currentPage = 4
+                currentPage = 4,
+                onAccount = {
+                    navController.navigate(ScreensForTheApp.VerificationScreen.route){
+                        launchSingleTop=true
+                        restoreState=true
+                    }
+                }
             )
         }
         composable(
