@@ -243,7 +243,7 @@ fun LoginScreen(
             // Send Code Button
             Button(
                 onClick = { /* TODO: Handle send code */ },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEEEEEE)),
+                colors = if(isFormValid) ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800)) else ButtonDefaults.buttonColors(containerColor = Color.White),
                 shape = RoundedCornerShape(30.dp),
                 modifier = Modifier
                     .fillMaxWidth(1f)

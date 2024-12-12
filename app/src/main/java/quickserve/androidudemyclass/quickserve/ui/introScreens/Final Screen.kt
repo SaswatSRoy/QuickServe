@@ -123,10 +123,10 @@ fun FinalScreen(
 
             Text(
                 text = "Beat the rush—pre-order your meal \n and dine in style!",
-                fontSize = (screenWidth * 0.055f).value.sp, // Increased from 0.04f to 0.045f
+                fontSize = (screenWidth * 0.050f).value.sp, // Increased from 0.04f to 0.045f
                 color = Color(0xFFA1A1A1),
                 textAlign = TextAlign.Center,
-                lineHeight = (screenWidth * 0.06f).value.sp
+                lineHeight = (screenWidth * 0.04f).value.sp
             )
 
             Spacer(modifier = Modifier.height(screenHeight * 0.1f))
@@ -135,13 +135,13 @@ fun FinalScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = screenHeight * 0.02f),
+                    .padding(vertical = screenHeight * 0.01f),
                 horizontalArrangement = Arrangement.Center
             ) {
                AnimatedDotIndicatorWithEffects(totalDots =4, currentPage = currentPage)
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(0.5f))
 
             // Bottom navigation with larger buttons
             Row(
@@ -158,8 +158,8 @@ fun FinalScreen(
                 TextButton(
                     onClick = onNavigateTo,
                     modifier = Modifier
-                        .heightIn(min = 48.dp)
-                        .padding(vertical = screenWidth * 0.08f, horizontal = screenWidth * 0.2f)
+                        .heightIn(min = 30.dp)
+                        .padding(vertical = screenWidth * 0.05f, horizontal = screenWidth * 0.2f)
                         .width(screenWidth * 0.4f),  // Set a fixed width for better proportion
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800)),
                     shape = RoundedCornerShape(24.dp),  // Slightly reduced from 50.dp for better proportion

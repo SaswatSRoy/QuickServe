@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import eu.androidudemyclass.quickserve.R
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import quickserve.androidudemyclass.quickserve.screens.ScreensForTheApp
 
@@ -59,6 +60,8 @@ fun Verify(
             // Show success message when OTP is verified
             coroutineScope.launch {
                 snackbarHostState.showSnackbar("Email Verified Successfully!")
+                delay(500)
+                navHostController.navigate(route = "location")
             }
         }
     }

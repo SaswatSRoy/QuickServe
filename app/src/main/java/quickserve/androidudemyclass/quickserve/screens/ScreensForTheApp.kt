@@ -9,4 +9,5 @@ sealed class ScreensForTheApp(val route: String) {
     data object LoginScreen:ScreensForTheApp("login_screen")
     data object SignUpScreen:ScreensForTheApp("sign_up_screen")
     data object VerificationScreen:ScreensForTheApp("verify")
+    data object Location:ScreensForTheApp("location")
 }

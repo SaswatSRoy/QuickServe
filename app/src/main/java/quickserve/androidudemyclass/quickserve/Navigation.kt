@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import quickserve.androidudemyclass.quickserve.screens.ScreensForTheApp
+import quickserve.androidudemyclass.quickserve.ui.LoginAndSignUp.LocationSelectionScreen
 import quickserve.androidudemyclass.quickserve.ui.LoginAndSignUp.LoginScreen
 import quickserve.androidudemyclass.quickserve.ui.LoginAndSignUp.SignUp
 import quickserve.androidudemyclass.quickserve.ui.LoginAndSignUp.Verify
@@ -270,12 +271,19 @@ fun Navigation(
                 )
             }
         ){
-            SignUp(onNavigateTo = {
-                navController.navigate(ScreensForTheApp.VerificationScreen.route){
-                    launchSingleTop=true
-                    restoreState=true
-                }
-            }, navHostController = navController,
+            SignUp(
+                onNavigateTo = { success ->
+                    if (success) {
+                        // Navigate to Verify screen on success
+                        navController.navigate(ScreensForTheApp.VerificationScreen.route) {
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    } else {
+                        // Handle failure (e.g., show an error toast or dialog)
+                    }
+                },
+                navHostController = navController,
                 currentPage = 5
             )
         }
@@ -307,7 +315,7 @@ fun Navigation(
             }
         ){
             Verify(onNavigateTo = {
-                navController.navigate(ScreensForTheApp.VerificationScreen.route){
+                navController.navigate(ScreensForTheApp.Location.route){
                     launchSingleTop=true
                     restoreState=true
                 }
@@ -315,6 +323,43 @@ fun Navigation(
                 currentPage = 5
             )
         }
+        composable(
+            route = ScreensForTheApp.Location.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(300)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(300)
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(300)
+                )
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(300)
+                )
+            }
+        ){
+            LocationSelectionScreen(onNavigateTo = {
+                navController.navigate(ScreensForTheApp.Location.route){
+                    launchSingleTop=true
+                    restoreState=true
+                }
+            }, navHostController = navController,
+                currentPage = 5
+            )
+        }
+
 
 
     }

@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.widget.ScrollView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -57,36 +58,55 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import eu.androidudemyclass.quickserve.R
+import quickserve.androidudemyclass.quickserve.Api.Result
+import quickserve.androidudemyclass.quickserve.Api.RetrofitClient
+import quickserve.androidudemyclass.quickserve.Api.UserRepository
+import quickserve.androidudemyclass.quickserve.Api.UserRequest
+import quickserve.androidudemyclass.quickserve.Api.UserViewModel
+import quickserve.androidudemyclass.quickserve.Api.UserViewModelFactory
 import quickserve.androidudemyclass.quickserve.screens.ScreensForTheApp
 
 
 @Composable
 fun SignUp(
-    onNavigateTo: () -> Unit,
+    onNavigateTo: (Boolean) -> Unit, // This callback will be used to navigate after sign-up
     navHostController: NavHostController = rememberNavController(),
-    currentPage: Int
+    currentPage: Int,
+
 ) {
+    val userRepository = UserRepository(RetrofitClient.instance)  // Create an instance of the repository
+
+    // Initialize the UserViewModel using the ViewModelProvider.Factory
+    val viewModel: UserViewModel = viewModel(
+        factory = UserViewModelFactory(userRepository)
+    )
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val proportionalPadding = screenWidth * 0.04f
+
     var email by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
-    var isEmailValid by remember { mutableStateOf(false) }
-    isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    val isEmailValid = remember(email) { android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() }
+
+
     var name by remember { mutableStateOf("") }
     var contactNumber by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
+
     val isPasswordValid = password.length >= 6
     val isNameValid = name.isNotEmpty() // simple check for name (non-empty)
     val isContactNumberValid = contactNumber.length == 10 && contactNumber.all { it.isDigit() }
     val isFormValid = isEmailValid && isNameValid && isContactNumberValid && isPasswordValid
+
     val context = LocalContext.current
     val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
     val termsAccepted = prefs.getBoolean("termsAccepted", false)
+    val success=true
 
     if (!termsAccepted && !showDialog) {
         showDialog = true
@@ -178,15 +198,17 @@ fun SignUp(
 
             Spacer(modifier = Modifier.height(screenHeight * 0.05f))
 
-
+            // Subheading
             Text(
-                text = "Lets Goo!! You are just few steps away Fill the details & continue",
+                text = "Lets Go!! You are just a few steps away. Fill the details & continue",
                 fontSize = 13.sp,
                 color = Color.Gray,
                 textAlign = TextAlign.Start,
                 modifier = Modifier.fillMaxWidth(1f)
             )
             Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+
+            // Name Field
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
@@ -195,7 +217,7 @@ fun SignUp(
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(end = 8.dp), // Space between text and icon
+                    .padding(end = 8.dp),
                 trailingIcon = {
                     if (name.isNotEmpty()) {
                         val iconColor = if (isNameValid) Color(0xFFFF9800) else Color.Gray
@@ -207,17 +229,20 @@ fun SignUp(
                     }
                 }
             )
+
             Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+
+            // Email Field
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
                 shape = RoundedCornerShape(120.dp),
-                label = { Text(text = "Enter email", color = Color.Gray) },
+                label = { Text(text = "Enter Email", color = Color.Gray) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(end = 8.dp), // Space between text and icon
+                    .padding(end = 8.dp),
                 trailingIcon = {
                     if (email.isNotEmpty()) {
                         val iconColor = if (isEmailValid) Color(0xFFFF9800) else Color.Gray
@@ -229,7 +254,10 @@ fun SignUp(
                     }
                 }
             )
+
             Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+
+            // Password Field
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -237,7 +265,7 @@ fun SignUp(
                 label = { Text(text = "Enter Password", color = Color.Gray) },
                 singleLine = true,
                 visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(end = 8.dp),
@@ -251,7 +279,10 @@ fun SignUp(
                     }
                 }
             )
+
             Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+
+            // Contact Number Field
             OutlinedTextField(
                 value = contactNumber,
                 onValueChange = { contactNumber = it },
@@ -261,7 +292,7 @@ fun SignUp(
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(end = 8.dp), // Space between text and icon
+                    .padding(end = 8.dp),
                 trailingIcon = {
                     if (contactNumber.isNotEmpty()) {
                         val iconColor = if (isContactNumberValid) Color(0xFFFF9800) else Color.Gray
@@ -276,20 +307,41 @@ fun SignUp(
 
             Spacer(modifier = Modifier.height(screenHeight * 0.06f))
 
-            // Send Code Button
+            // Continue Button
             Button(
-                onClick = onNavigateTo,
-                colors = ButtonDefaults.buttonColors( containerColor = if (isFormValid) Color(0xFFFF9800) else Color(0xFFEEEEEE)),
-                shape = RoundedCornerShape(30.dp),
+                onClick = {
+                    val userRequest = UserRequest(name, email, password, contactNumber)
+                    viewModel.signUp(userRequest) { result ->
+                        when (result) {
+                            is Result.Success -> {
+                                // Handle success (navigate to the next screen)
+                                Toast.makeText(context, "Sign-up successful!", Toast.LENGTH_SHORT).show()
+                                onNavigateTo(success) // Navigate to verification screen
+                            }
+                            is Result.Error -> {
+                                // Handle failure (show error message)
+                                Toast.makeText(context, "Sign-up failed: ${result.exception.message}", Toast.LENGTH_SHORT).show()
+                            }
+                            Result.Loading -> TODO()
+
+
+                        }
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800)),
                 modifier = Modifier
-                    .fillMaxWidth(1f)
-                    .height(40.dp)
+                    .fillMaxWidth()
+                    .height(48.dp),
+                enabled = isFormValid
             ) {
-                Text(text = "Continue", color = if(isFormValid) Color.White else Color.Gray, fontSize = 15.sp)
+                Text(
+                    text = "Continue",
+                    color = Color.White,
+                    style = TextStyle(fontSize = 14.sp)
+                )
             }
 
 
-            // Sign up option
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
@@ -313,9 +365,7 @@ fun SignUp(
                 }
             }
 
-            Spacer(modifier = Modifier.height(screenHeight * 0.05f))
-
-            // Continue with Google button
+            Spacer(modifier = Modifier.height(screenHeight * 0.03f))
             OutlinedButton(
                 onClick = { /* TODO: Handle Google Sign-In */ },
                 border = BorderStroke(width = 0.5.dp, color = Color.LightGray),
@@ -372,6 +422,8 @@ fun SignUp(
         }
     }
 }
+
+
 
 
 @Preview(showBackground = true)

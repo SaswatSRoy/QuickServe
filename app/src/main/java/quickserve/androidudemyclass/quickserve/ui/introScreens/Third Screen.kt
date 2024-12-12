@@ -118,13 +118,13 @@ import quickserve.androidudemyclass.quickserve.screens.ScreensForTheApp
                 // Text section with larger font sizes
                 Text(
                     text = "Birthday Cakes!!",
-                    fontSize = (screenWidth * 0.08f).value.sp, // Increased from 0.06f to 0.08f
+                    fontSize = (screenWidth * 0.07f).value.sp, // Increased from 0.06f to 0.08f
                     fontWeight = FontWeight.Medium,
                     color = Color(0xFF6C6C6C),
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.height(screenHeight * 0.02f))
+                Spacer(modifier = Modifier.height(screenHeight * 0.01f))
 
                 Text(
                     text = "Custom-made birthday cakes,\ndelivered with love!",
@@ -138,14 +138,14 @@ import quickserve.androidudemyclass.quickserve.screens.ScreensForTheApp
 
                 // Dots indicator with larger dots
                 Row(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(5.dp),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     AnimatedDotIndicatorWithEffects(totalDots =4, currentPage =currentPage )
                 }
 
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.weight(0.5f))
 
                 // Bottom navigation with larger buttons
                 Row(
