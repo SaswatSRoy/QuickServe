@@ -159,8 +159,8 @@ fun FinalScreen(
                     onClick = onNavigateTo,
                     modifier = Modifier
                         .heightIn(min = 30.dp)
-                        .padding(vertical = screenWidth * 0.05f, horizontal = screenWidth * 0.2f)
-                        .width(screenWidth * 0.4f),  // Set a fixed width for better proportion
+                        .padding(vertical = screenWidth * 0.06f, horizontal = screenWidth * 0.2f)
+                        .width(screenWidth * 0.8f),  // Set a fixed width for better proportion
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800)),
                     shape = RoundedCornerShape(24.dp),  // Slightly reduced from 50.dp for better proportion
                     contentPadding = PaddingValues(
@@ -178,7 +178,7 @@ fun FinalScreen(
                             fontSize = (screenWidth * 0.045f).value.sp,  // Slightly reduced for better balance
                             fontWeight = FontWeight.SemiBold,  // Changed to SemiBold for better readability
                             textAlign = TextAlign.Center,
-                            letterSpacing = 0.5.sp,
+                            letterSpacing = 0.3.sp,
                             modifier = Modifier.fillMaxWidth()
                         )
                     }

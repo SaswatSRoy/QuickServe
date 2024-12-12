@@ -273,6 +273,7 @@ fun LoginScreen(
                                 Toast.makeText(context, "Login failed: ${result.exception.message}", Toast.LENGTH_SHORT).show()
                             }
                             Result.Loading -> TODO()
+
                         }
                     }
 
@@ -319,7 +320,7 @@ fun LoginScreen(
             // Continue with Google button
             OutlinedButton(
                 onClick = { /* TODO: Handle Google Sign-In */ },
-                border = BorderStroke(width = 0.5.dp, color = Color.LightGray),
+                border = BorderStroke(width = 0.3.dp, color = Color.LightGray),
                 shape = RoundedCornerShape(120.dp),
                 modifier = Modifier
                     .fillMaxWidth(1f)

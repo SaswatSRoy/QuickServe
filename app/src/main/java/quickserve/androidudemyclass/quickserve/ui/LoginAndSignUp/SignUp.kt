@@ -336,8 +336,8 @@ fun SignUp(
             ) {
                 Text(
                     text = "Continue",
-                    color = Color.White,
-                    style = TextStyle(fontSize = 14.sp)
+                    color = Color.Gray,
+                    style = TextStyle(fontSize = 18.sp)
                 )
             }
 

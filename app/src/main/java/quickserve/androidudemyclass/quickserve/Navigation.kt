@@ -248,7 +248,7 @@ fun Navigation(
             }, navHostController = navController,
                 currentPage = 4,
                 onAccount = {
-                    navController.navigate(ScreensForTheApp.VerificationScreen.route){
+                    navController.navigate(ScreensForTheApp.SignUpScreen.route){
                         launchSingleTop=true
                         restoreState=true
                     }
