@@ -314,12 +314,12 @@ fun SignUp(
                     viewModel.signUp(userRequest) { result ->
                         when (result) {
                             is Result.Success -> {
-                                // Handle success (navigate to the next screen)
+
                                 Toast.makeText(context, "Sign-up successful!", Toast.LENGTH_SHORT).show()
                                 onNavigateTo(success) // Navigate to verification screen
                             }
                             is Result.Error -> {
-                                // Handle failure (show error message)
+
                                 Toast.makeText(context, "Sign-up failed: ${result.exception.message}", Toast.LENGTH_SHORT).show()
                             }
                             Result.Loading -> TODO()
